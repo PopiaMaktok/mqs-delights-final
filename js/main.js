@@ -317,54 +317,59 @@ function removeFromCart(index) {
 }
 
 // FUNGSI: Checkout 
+// FUNGSI: Checkout (Versi Fix)
 async function checkout() {
     // 1. Cek kalau bakul kosong
-    let cartIds = JSON.parse(localStorage.getItem('mqs_cart')) || [];
-    if (cartIds.length === 0) return alert("Hey.. Don't you thing the cart is a bit empty?");
+    let cart = JSON.parse(localStorage.getItem('mqs_cart')) || [];
+    if (cart.length === 0) return alert("Hey.. Don't you think the cart is a bit empty?");
 
-    // 2. Tunjukkan loading sikit
-    console.log("Processing order...");
+    console.log("Processing order for MQS Delights...");
 
-    // 3. Tarik data harga terbaru dari DB untuk elakkan user 'hack' harga
-    const { data: items } = await _supabase.from('menu_items').select('*').in('id', cartIds);
-    
-    let total = 0;
-    cartIds.forEach(id => {
-        const item = items.find(i => i.id === id);
-        if (item) total += parseFloat(item.price);
-    });
-
-    // 4. Kira Loyalty Points (RM1 = 10 Points)
+    // 2. Kira Total & Points (Guna data dari cart terus)
+    let total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
     const points = Math.floor(total * 10);
 
-    // 5. HANTAR KE SUPABASE
-    const { error } = await _supabase
-        .from('orders')
-        .insert([
-            { 
-                order_items: cartIds, 
-                total_amount: total, 
-                points_gained: points 
-            }
-        ]);
+    try {
+        // 3. HANTAR KE SUPABASE 
+        // Pastikan guna 'supabase' (bukan _supabase kalau dalam config kau 'supabase')
+        const { error } = await supabase
+            .from('orders')
+            .insert([
+                { 
+                    customer_name: 'Guest User', // Nama default
+                    items: cart,                // Nama column dalam DB: items
+                    total_price: total,         // Nama column dalam DB: total_price
+                    points_earned: points,      // Nama column dalam DB: points_earned
+                    status: 'Pending'
+                }
+            ]);
 
-    if (error) {
-        alert("There was an issue processing your order. Please try again.");
-        console.error(error);
-    } else {
-        // 6. SUCCESS! Clear cart & tunjuk tahniah
+        if (error) throw error;
+
+        // 4. SUCCESS! Clear cart & tunjuk tahniah
         localStorage.removeItem('mqs_cart');
         
-        // Simpan point dalam localStorage untuk tunjuk kat Dashboard nanti
+        // Simpan point dalam localStorage (Optional)
         let userPoints = parseInt(localStorage.getItem('mqs_points')) || 0;
         localStorage.setItem('mqs_points', userPoints + points);
 
-        alert(`🔥 ORDER SUCCESS!\n\nTotal: RM ${total.toFixed(2)}\nPoints Earned: ${points} pts\n\nThe chef is preparing your delicious meal!`);
+        alert(`🔥 ORDER SUCCESS!\n\nTotal: RM ${total.toFixed(2)}\nPoints Earned: ${points} pts\n\nThe chef is preparing your meal!`);
         
-        window.location.href = 'dashboard.html'; // Hantar user ke page profile dia
+        window.location.href = '../index.html'; // Balik ke Home
+
+    } catch (error) {
+        alert("Aduh! Ada masalah: " + error.message);
+        console.error("Detail Error:", error);
     }
 }
 
+// 5. PENTING: Sambungkan fungsi ni dengan butang kat HTML
+document.addEventListener('DOMContentLoaded', () => {
+    const btn = document.getElementById('checkout-btn');
+    if (btn) {
+        btn.onclick = checkout; // Guna cara ni paling senang nak link
+    }
+});
 // ==========================================
 // 🚀 INITIALIZATION
 // ==========================================
