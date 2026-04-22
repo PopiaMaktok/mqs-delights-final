@@ -252,6 +252,8 @@ function addToCart(itemId, itemName, itemPrice) {
 
     // 4. Simpan & Update
     localStorage.setItem('mqs_cart', JSON.stringify(cart));
+    
+    // Update badge oren kat navbar
     if (typeof updateCartCount === 'function') updateCartCount();
 
     alert(`🔥 NICE! ${itemName} added to cart.`);
