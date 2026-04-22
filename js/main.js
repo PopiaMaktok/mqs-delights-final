@@ -232,24 +232,24 @@ async function fetchMenu() {
 let cart = JSON.parse(localStorage.getItem('mqs_cart')) || [];
 
 // FUNGSI: Tambah barang ke bakul (Dipanggil dari menu.html)
-function addToCart(itemId, itemName, itemPrice) {
-    // 1. Ambil data cart lama
+window.addToCart = function(itemId, itemName, itemPrice) {
+    console.log("Adding:", itemName); // Kita letak log untuk check kat Console
+    
     let cart = JSON.parse(localStorage.getItem('mqs_cart')) || [];
+    
+    // ... sambung kod push kau macam tadi ...
+    cart.push({
+        id: itemId,
+        name: itemName,
+        price: parseFloat(itemPrice),
+        quantity: 1
+    });
 
-    // 2. Cek kalau barang dah ada
-    const existingItem = cart.find(item => item.id === itemId);
-
-    if (existingItem) {
-        existingItem.quantity += 1;
-    } else {
-        // 3. Simpan sebagai OBJEK lengkap
-        cart.push({
-            id: itemId,
-            name: itemName,
-            price: parseFloat(itemPrice), 
-            quantity: 1
-        });
-    }
+    localStorage.setItem('mqs_cart', JSON.stringify(cart));
+    alert(`${itemName} added to cart.`);
+    
+    if (typeof updateCartCount === 'function') updateCartCount();
+}
 
     // 4. Simpan & Update
     localStorage.setItem('mqs_cart', JSON.stringify(cart));
