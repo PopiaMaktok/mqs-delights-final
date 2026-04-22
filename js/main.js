@@ -80,8 +80,8 @@ function renderCart() {
     if (cart.length === 0) {
         container.innerHTML = `
             <div class="text-center py-20 opacity-50 italic">
-                <p>Bakul kau kosong bro...</p>
-                <a href="menu.html" class="text-[#FF8C00] font-bold hover:underline">Jom Order Sekarang!</a>
+                <p>Hey.. the cart looks a bit empty don't you think?</p>
+                <a href="menu.html" class="text-[#FF8C00] font-bold hover:underline">Let's Order Now!</a>
             </div>`;
         if (totalEl) totalEl.innerText = "RM 0.00";
         return;
@@ -105,7 +105,7 @@ function renderCart() {
                     <p class="text-[#FF8C00] font-bold text-sm">RM ${price.toFixed(2)} x ${qty}</p>
                 </div>
                 <button onclick="removeFromCart(${index})" class="text-gray-600 hover:text-red-500 font-bold transition">
-                    BUANG
+                    REMOVE
                 </button>
             </div>`;
     });
