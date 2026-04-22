@@ -214,9 +214,10 @@ async function fetchMenu() {
                         <span class="text-[#FF8C00] font-bold">RM ${item.price.toFixed(2)}</span>
                     </div>
                     <p class="text-gray-400 text-sm mb-6">${item.description}</p>
-                    <button onclick="addToCart(${item.id})" class="w-full py-3 bg-[#B89C6D] hover:bg-[#FF8C00] text-black font-bold rounded-lg transition-colors duration-300">
-                        ADD TO CART
-                    </button>
+                    <button onclick="addToCart(${item.id}, '${item.name}', ${item.price})" 
+        class="w-full py-3 bg-[#B89C6D] hover:bg-[#FF8C00] text-black font-bold rounded-lg transition-colors duration-300">
+    ADD TO CART
+</button>
                 </div>
             </div>
         `;
