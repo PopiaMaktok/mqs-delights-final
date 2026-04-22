@@ -73,17 +73,52 @@ window.addToCart = function(itemId, itemName, itemPrice) {
     alert(`🔥 NICE! ${itemName} masuk bakul.`);
 };
 
+// FUNGSI: Paparkan barang dalam bakul (Versi Paling Solid)
 function renderCart() {
     const container = document.getElementById('cart-items');
     const totalEl = document.getElementById('total-price');
-    if (!container) return;
 
+    if (!container) return; // Exit kalau bukan kat page Cart
+
+    // 1. Ambil data bakul (Objek Penuh)
     let cart = JSON.parse(localStorage.getItem('mqs_cart')) || [];
+
     if (cart.length === 0) {
-        container.innerHTML = `<div class="text-center py-10"><p class="text-gray-500">Cart kosong bro.</p></div>`;
+        container.innerHTML = `
+            <div class="border border-dashed border-gray-800 rounded-3xl p-12 text-center">
+                <p class="text-gray-600 mb-4 italic">"Hey.. Your cart is a bit empty don't you think?"</p>
+                <a href="menu.html" class="text-[#FF8C00] font-bold hover:underline">Let's Get Some Food!</a>
+            </div>`;
         totalEl.innerText = "RM 0.00";
         return;
     }
+
+    // 2. Lukis UI terus dari data bakul
+    container.innerHTML = '';
+    let total = 0;
+
+    cart.forEach((item, index) => {
+        total += (item.price * item.quantity);
+        
+        container.innerHTML += `
+            <div class="flex items-center justify-between p-6 bg-[#151515] border border-gray-800 rounded-2xl mb-4 orange-glow">
+                <div class="flex flex-col">
+                    <h4 class="text-white font-bold text-lg">${item.name}</h4>
+                    <p class="text-[#FF8C00] font-black text-sm uppercase tracking-widest">
+                        RM ${item.price.toFixed(2)} x ${item.quantity}
+                    </p>
+                </div>
+                <button onclick="removeFromCart(${index})" class="text-gray-600 hover:text-red-500 transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                    </svg>
+                </button>
+            </div>`;
+    });
+
+    // 3. Update Total Price
+    totalEl.innerText = `RM ${total.toFixed(2)}`;
+}
 
     container.innerHTML = '';
     let total = 0;
