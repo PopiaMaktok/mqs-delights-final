@@ -231,19 +231,30 @@ async function fetchMenu() {
 let cart = JSON.parse(localStorage.getItem('mqs_cart')) || [];
 
 // FUNGSI: Tambah barang ke bakul (Dipanggil dari menu.html)
-function addToCart(itemId) {
-    console.log("Adding item ID:", itemId);
+function addToCart(itemId, itemName, itemPrice) {
+    // 1. Ambil data cart lama
+    let cart = JSON.parse(localStorage.getItem('mqs_cart')) || [];
 
-    // Masukkan ke dalam array
-    cart.push(itemId);
+    // 2. Cek kalau barang dah ada
+    const existingItem = cart.find(item => item.id === itemId);
 
-    // Simpan ke LocalStorage (Tukar array jadi string)
+    if (existingItem) {
+        existingItem.quantity += 1;
+    } else {
+        // 3. Simpan sebagai OBJEK lengkap
+        cart.push({
+            id: itemId,
+            name: itemName,
+            price: parseFloat(itemPrice), 
+            quantity: 1
+        });
+    }
+
+    // 4. Simpan & Update
     localStorage.setItem('mqs_cart', JSON.stringify(cart));
+    if (typeof updateCartCount === 'function') updateCartCount();
 
-    // Alert Premium (Kita pastikan muncul!)
-    alert("🔥 NICE! Item #" + itemId + " added to cart.\nTotal items in cart: " + cart.length);
-    
-    // Kalau kita ada fungsi update badge navbar, panggil kat sini nanti
+    alert(`🔥 NICE! ${itemName} added to cart.`);
 }
 
 // FUNGSI: Paparkan barang dalam bakul (Dipanggil di cart.html)
@@ -318,29 +329,38 @@ function removeFromCart(index) {
 
 // FUNGSI: Checkout 
 async function checkout() {
-    // 1. Ambil data cart
+    // 1. Ambil data bakul
     let cart = JSON.parse(localStorage.getItem('mqs_cart')) || [];
     
     if (cart.length === 0) {
-        return alert("Hey.. Your cart is empty!");
+        return alert("Hey.. isn't the cart a bit empty?");
     }
 
-    // 2. Kira Total dengan lebih selamat
+    // 2. KIRA TOTAL (Guna cara paling selamat)
     let total = 0;
     cart.forEach(item => {
-        // Kita pastikan item.price tu ada nombor, kalau tak ada kita letak 0
-        const harga = parseFloat(item.price) || 0;
-        const kuantiti = parseInt(item.quantity) || 1;
-        total += harga * kuantiti;
+        // Kita paksa JS cari 'price' atau 'harga'. 
+        // parseFloat akan buang kalau ada "RM" dalam text
+        let hargaItem = item.price;
+        
+        // Kalau hargaItem tu string macam "RM 38.00", kita cuci dia
+        if (typeof hargaItem === 'string') {
+            hargaItem = hargaItem.replace(/[^0-9.]/g, ''); 
+        }
+        
+        const price = parseFloat(hargaItem) || 0;
+        const qty = parseInt(item.quantity) || 1;
+        total += price * qty;
     });
 
     const points = Math.floor(total * 10);
 
-    // 3. Log untuk kita debug kat Console (F12)
-    console.log("Menghantar Order:", { total, points, cart });
+    // DEBUG: Tengok kat Console (F12) kalau total masih 0
+    console.log("Cart Data:", cart);
+    console.log("Total Dikira:", total);
 
     try {
-        // hantar ke Supabase guna _supabase (ikut config.js kau)
+        // 3. HANTAR KE SUPABASE (Pastikan guna _supabase)
         const { error } = await _supabase
             .from('orders')
             .insert([
@@ -355,23 +375,17 @@ async function checkout() {
 
         if (error) throw error;
 
-        // 4. Success!
-        localStorage.removeItem('mqs_cart');
+        // 4. BERJAYA!
+        alert(`🔥 ORDER SUCCESS!\n\nTotal: RM ${total.toFixed(2)}\nPoints: ${points} pts\n\nThe chef is preparing your meal!`);
         
-        // Simpan point untuk tunjuk kat Dashboard nanti
-        let totalPoints = parseInt(localStorage.getItem('mqs_points')) || 0;
-        localStorage.setItem('mqs_points', totalPoints + points);
-
-        alert(`🔥 ORDER SUCCESS!\n\nTotal: RM ${total.toFixed(2)}\nPoints Earned: ${points} pts\n\nThe chef is preparing your meal!`);
-        
+        localStorage.removeItem('mqs_cart'); // Kosongkan cart
         window.location.href = '../index.html';
 
     } catch (error) {
-        alert("Aduh! Ada masalah: " + error.message);
-        console.error(error);
+        alert("Uh oh!: " + error.message);
+        console.error("Error Detail:", error);
     }
 }
-
 // 5. PENTING: Sambungkan fungsi ni dengan butang kat HTML
 document.addEventListener('DOMContentLoaded', () => {
     const btn = document.getElementById('checkout-btn');
