@@ -325,8 +325,13 @@ async function checkout() {
 
     console.log("Processing order for MQS Delights...");
 
-    // 2. Kira Total & Points (Guna data dari cart terus)
-    let total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    // FIX NaN: Guna parseFloat & Number supaya JS tak pening
+    let total = cart.reduce((sum, item) => {
+        const price = parseFloat(item.price) || 0;
+        const qty = parseInt(item.quantity) || 1;
+        return sum + (price * qty);
+    }, 0);
+
     const points = Math.floor(total * 10);
 
     try {
