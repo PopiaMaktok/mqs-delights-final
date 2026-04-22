@@ -358,7 +358,7 @@ async function checkout() {
         window.location.href = '../index.html'; // Balik ke Home
 
     } catch (error) {
-        alert("Aduh! Ada masalah: " + error.message);
+        alert("Uh oh!: " + error.message);
         console.error("Detail Error:", error);
     }
 }
