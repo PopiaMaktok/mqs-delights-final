@@ -73,28 +73,45 @@ function renderCart() {
     if (!container) return;
 
     const cart = JSON.parse(localStorage.getItem('mqs_cart')) || [];
+    
+    // DEBUG: Tengok kat Console (F12) data apa yang ada
+    console.log("Isi bakul sekarang:", cart);
+
     if (cart.length === 0) {
-        container.innerHTML = `<div class="text-center py-20 opacity-50 italic">Cart kau kosong bro...</div>`;
-        totalEl.innerText = "RM 0.00";
+        container.innerHTML = `
+            <div class="text-center py-20 opacity-50 italic">
+                <p>Bakul kau kosong bro...</p>
+                <a href="menu.html" class="text-[#FF8C00] font-bold hover:underline">Jom Order Sekarang!</a>
+            </div>`;
+        if (totalEl) totalEl.innerText = "RM 0.00";
         return;
     }
 
     container.innerHTML = '';
     let total = 0;
+
     cart.forEach((item, index) => {
-        total += (item.price * item.quantity);
+        // Pelindung: Kalau data lama tak ada harga, kita letak 0 supaya tak crash
+        const price = parseFloat(item.price) || 0;
+        const name = item.name || "Menu MQS";
+        const qty = item.quantity || 1;
+        
+        total += (price * qty);
+
         container.innerHTML += `
-            <div class="flex justify-between items-center bg-[#111] p-6 rounded-2xl border border-gray-800 mb-4">
+            <div class="flex justify-between items-center bg-[#111] p-6 rounded-2xl border border-gray-800 mb-4 orange-glow">
                 <div>
-                    <h4 class="font-bold text-white text-lg">${item.name}</h4>
-                    <p class="text-[#FF8C00] font-bold text-sm">RM ${item.price.toFixed(2)} x ${item.quantity}</p>
+                    <h4 class="font-bold text-white text-lg">${name}</h4>
+                    <p class="text-[#FF8C00] font-bold text-sm">RM ${price.toFixed(2)} x ${qty}</p>
                 </div>
-                <button onclick="removeFromCart(${index})" class="text-gray-600 hover:text-red-500 font-bold">BUANG</button>
+                <button onclick="removeFromCart(${index})" class="text-gray-600 hover:text-red-500 font-bold transition">
+                    BUANG
+                </button>
             </div>`;
     });
-    totalEl.innerText = `RM ${total.toFixed(2)}`;
-}
 
+    if (totalEl) totalEl.innerText = `RM ${total.toFixed(2)}`;
+}
 window.removeFromCart = function(index) {
     let cart = JSON.parse(localStorage.getItem('mqs_cart')) || [];
     cart.splice(index, 1);
