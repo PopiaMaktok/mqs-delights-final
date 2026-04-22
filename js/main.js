@@ -332,7 +332,7 @@ async function checkout() {
     try {
         // 3. HANTAR KE SUPABASE 
         // Pastikan guna 'supabase' (bukan _supabase kalau dalam config kau 'supabase')
-        const { error } = await supabase
+        const { error } = await _supabase
             .from('orders')
             .insert([
                 { 
