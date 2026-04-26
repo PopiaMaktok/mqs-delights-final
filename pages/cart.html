@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart - MQS Delights</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                colors: {
+                    'gold': '#B89C6D',
+                    'orange': '#FF8C00',
+                    'black': '#0D0D0D',
+                    'surface': '#1A1A1A',
+                    'gray-dark': '#2A2A2A',
+                }
+            }
+        }
+    </script>
+    
+    <!-- Custom Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body class="bg-black text-white font-inter">
+    
+    <!-- Navigation Bar -->
+    <nav id="navbar" class="fixed w-full top-0 z-50 transition-all duration-300 bg-black/80 backdrop-blur-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo -->
+                <div class="flex-shrink-0">
+                    <a href="../index.html" class="text-2xl font-bold font-poppins" style="color: #B89C6D;">MQS</a>
+                </div>
+                
+                <!-- Menu Items -->
+                <div class="hidden md:flex space-x-8">
+                    <a href="../index.html#menu" class="hover:text-gold transition-colors duration-200">Menu</a>
+                    <a href="../index.html#gallery" class="hover:text-gold transition-colors duration-200">Gallery</a>
+                    <a href="../index.html#about" class="hover:text-gold transition-colors duration-200">About</a>
+                    <a href="../index.html#contact" class="hover:text-gold transition-colors duration-200">Contact</a>
+                </div>
+                
+                <!-- CTA Button -->
+                <a href="reservation.html" class="btn-glow hidden sm:block px-6 py-2 rounded-lg font-semibold transition-all duration-200 no-underline">
+                    BOOK A TABLE
+                </a>
+                
+                <!-- Mobile Menu Button -->
+                <button id="mobile-menu-btn" class="md:hidden text-gold text-xl">☰</button>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Page Header -->
+    <header class="pt-32 pb-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-black via-gray-dark to-surface text-center">
+        <h1 class="text-6xl sm:text-7xl font-bold font-poppins mb-4">
+            Your <span class="gradient-text">Cart</span>
+        </h1>
+        <p class="text-lg text-gray-300 max-w-2xl mx-auto">
+            Review your order and proceed to checkout
+        </p>
+    </header>
+    
+    <!-- Cart Content -->
+<main class="pt-24 pb-12 min-h-screen bg-[#0D0D0D]">
+    <div class="max-w-4xl mx-auto px-4">
+        <h1 class="text-4xl font-bold text-white mb-8">Shopping <span class="text-[#FF8C00]">Cart</span></h1>
+
+        <div id="cart-items" class="space-y-4">
+            <p class="text-gray-500 animate-pulse text-center py-10">Tengah menyusun bakul kau...</p>
+        </div>
+
+        <div class="mt-10 p-6 bg-[#1A1A1A] border border-gray-800 rounded-2xl">
+            <div class="flex justify-between items-center mb-6">
+                <span class="text-gray-400 text-lg">Total Payment:</span>
+                <span id="total-price" class="text-3xl font-bold text-[#FF8C00]">RM 0.00</span>
+            </div>
+            <button onclick="checkout()" class="w-full py-4 bg-[#B89C6D] hover:bg-[#FF8C00] text-black font-extrabold rounded-xl transition-all duration-300 shadow-lg shadow-orange-900/20">
+                PROCEED TO CHECKOUT
+            </button>
+        </div>
+    </div>
+</main>
+   
+    <!-- Footer -->
+    <footer class="bg-gray-dark py-8 px-4 sm:px-6 lg:px-8 border-t border-gray-700">
+        <div class="max-w-6xl mx-auto">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+                <div>
+                    <h3 class="text-gold font-bold mb-4">MQS DELIGHTS</h3>
+                    <p class="text-gray-400 text-sm">Premium Western Cuisine Experience</p>
+                </div>
+                
+                <div>
+                    <h4 class="text-white font-semibold mb-4">Quick Links</h4>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li><a href="../index.html#menu" class="hover:text-gold transition-colors">Menu</a></li>
+                        <li><a href="../index.html#about" class="hover:text-gold transition-colors">About</a></li>
+                        <li><a href="reservation.html" class="hover:text-gold transition-colors">Reservations</a></li>
+                        <li><a href="../index.html#contact" class="hover:text-gold transition-colors">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-white font-semibold mb-4">Follow Us</h4>
+                    <div class="flex space-x-4 text-sm">
+                        <a href="#" class="text-gold hover:text-orange transition-colors">Facebook</a>
+                        <a href="#" class="text-gold hover:text-orange transition-colors">Instagram</a>
+                        <a href="#" class="text-gold hover:text-orange transition-colors">Twitter</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-700 pt-8 text-center text-gray-400 text-sm">
+                <p>&copy; 2024 MQS Delights. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../js/config.js"></script>
+    <script src="../js/main.js"></script>
+</body>
+</html>
