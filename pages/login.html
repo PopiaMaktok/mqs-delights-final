@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | MQS Delights</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        .orange-glow { box-shadow: 0 0 20px rgba(255, 140, 0, 0.15); }
+        .input-focus:focus {
+            border-color: #FF8C00;
+            box-shadow: 0 0 10px rgba(255, 140, 0, 0.3);
+            outline: none;
+        }
+    </style>
+</head>
+<body class="bg-[#0A0A0A] text-white min-h-screen flex items-center justify-center p-4">
+
+    <div class="fixed top-0 left-0 w-full h-full overflow-hidden -z-10">
+        <div class="absolute top-[-10%] right-[-10%] w-[500px] h-[500px] bg-[#FF8C00] opacity-5 blur-[120px] rounded-full"></div>
+    </div>
+
+    <div class="w-full max-w-md bg-[#121212] border border-gray-800 p-8 rounded-3xl orange-glow">
+        <div class="text-center mb-8">
+            <h1 class="text-3xl font-black tracking-tighter uppercase italic">
+                MQS <span class="text-[#FF8C00]">DELIGHTS</span>
+            </h1>
+            <p class="text-gray-400 text-sm mt-2 font-medium uppercase tracking-widest italic">Welcome Back, Member</p>
+        </div>
+
+        <form id="login-form" class="space-y-5">
+            <div>
+                <label class="block text-xs font-bold text-gray-500 uppercase tracking-widest mb-2">Email Address</label>
+                <input type="email" id="login-email" placeholder="you@example.com" required
+                    class="w-full bg-[#1A1A1A] border border-gray-800 p-4 rounded-xl text-white placeholder-gray-600 transition-all input-focus">
+            </div>
+
+            <div>
+                <label class="block text-xs font-bold text-gray-500 uppercase tracking-widest mb-2">Password</label>
+                <input type="password" id="login-password" placeholder="••••••••" required
+                    class="w-full bg-[#1A1A1A] border border-gray-800 p-4 rounded-xl text-white placeholder-gray-600 transition-all input-focus">
+            </div>
+
+            <button type="submit" 
+                class="w-full py-4 bg-[#FF8C00] hover:bg-[#E67E00] text-black font-black rounded-xl transition-all transform hover:scale-[1.02] active:scale-95">
+                LOGIN TO DASHBOARD
+            </button>
+        </form>
+
+        <div class="mt-8 text-center border-t border-gray-800 pt-6">
+            <p class="text-gray-500 text-sm">
+                New here? 
+                <a href="sign-up.html" class="text-[#FF8C00] font-bold hover:underline ml-1">Join Now</a>
+            </p>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../js/config.js"></script>
+    <script src="../js/main.js"></script>
+</body>
+</html>

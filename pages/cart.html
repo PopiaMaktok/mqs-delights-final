@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Cart | MQS Delights</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        .orange-glow { box-shadow: 0 0 40px rgba(255, 140, 0, 0.1); }
+        .glass { background: rgba(20, 20, 20, 0.7); backdrop-filter: blur(10px); }
+        .cart-card { background: #121212; border: 1px solid rgba(255, 140, 0, 0.1); }
+    </style>
+</head>
+<body class="bg-[#0A0A0A] text-white min-h-screen">
+
+    <nav class="border-b border-gray-800 p-5 glass sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto flex justify-between items-center">
+            <h1 class="text-2xl font-black italic tracking-tighter">MQS <span class="text-[#FF8C00]">DELIGHTS</span></h1>
+            <div class="space-x-8 text-sm font-bold uppercase tracking-widest text-gray-400">
+                <a href="../index.html" class="hover:text-[#FF8C00] transition">Home</a>
+                <a href="menu.html" class="hover:text-[#FF8C00] transition">Menu</a>
+                <a href="dashboard.html" class="hover:text-[#FF8C00] transition">Dashboard</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-4xl mx-auto p-6 mt-12">
+        <div class="text-center mb-12">
+            <h2 class="text-5xl font-black italic uppercase tracking-tighter">YOUR <span class="text-[#FF8C00]">CART</span></h2>
+            <p class="text-gray-500 mt-2 tracking-widest uppercase text-xs font-bold">Review your selection of premium grills</p>
+        </div>
+
+        <div id="cart-items" class="space-y-4 mb-10">
+            </div>
+
+        <div class="cart-card p-8 rounded-[40px] orange-glow border-t-4 border-t-[#FF8C00]">
+            <div class="flex justify-between items-center mb-6">
+                <span class="text-gray-400 font-bold uppercase tracking-widest text-sm">Total Payment</span>
+                <span id="total-price" class="text-4xl font-black text-white">RM 0.00</span>
+            </div>
+            
+            <button id="checkout-btn" onclick="processCheckout()" class="w-full py-5 bg-[#FF8C00] text-black font-black rounded-2xl text-xl hover:scale-[1.02] active:scale-95 transition-all shadow-lg shadow-orange-900/20 uppercase italic">
+    PROCEED TO CHECKOUT
+</button>
+            
+            <p class="text-center text-[10px] text-gray-600 mt-4 tracking-widest uppercase font-bold">
+                *Earn 10 points for every RM1 spent
+            </p>
+        </div>
+
+        <div class="text-center mt-8">
+            <a href="menu.html" class="text-gray-500 hover:text-white transition font-bold uppercase text-xs tracking-[0.3em]">
+                <i class="fa-solid fa-arrow-left mr-2"></i> Add More Food
+            </a>
+        </div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../js/config.js"></script>
+    <script src="../js/main.js"></script>
+</body>
+</html>

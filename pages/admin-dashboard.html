@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Control | MQS Delights</title>
+    <script src="https://cdn.tailwindcss.com">
+
+        async function checkAdminGate() {
+    // 1. Cek ada user login tak?
+    const { data: { user } } = await _supabase.auth.getUser();
+
+    if (!user) {
+        window.location.href = 'login.html';
+        return;
+    }
+
+    // 2. Tarik profile dia untuk tengok role
+    const { data: profile } = await _supabase
+        .from('profiles')
+        .select('role')
+        .eq('id', user.id)
+        .single();
+
+    // 3. Kalau role bukan 'admin', tendang dia keluar!
+    if (!profile || profile.role !== 'admin') {
+        alert("HEY! You don't have access to this page. Redirecting to dashboard...");
+        window.location.href = 'dashboard.html'; // Tendang balik ke User Dashboard
+    } else {
+        console.log("Welcome, Admin Aqeel. Access Granted. 🕶️");
+        loadAdminData(); // Baru la jalankan fungsi tarik data tadi
+    }
+}
+
+// Tukar DOMContentLoaded tadi untuk panggil pagar dulu
+document.addEventListener('DOMContentLoaded', checkAdminGate);
+
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        
+    /* Mula-mula sorok semua benda */
+    body { 
+        opacity: 0; 
+        transition: opacity 0.5s ease-in-out; 
+    }
+
+    /* Hanya tunjuk bila bouncer dah check role === 'admin' */
+    body.access-granted { 
+        opacity: 1; 
+    }
+
+        .orange-glow { box-shadow: 0 0 30px rgba(255, 140, 0, 0.1); }
+        .sidebar-link:hover { background: rgba(255, 140, 0, 0.1); color: #FF8C00; }
+        .table-container { background: #111; border: 1px solid #222; border-radius: 20px; overflow: hidden; }
+    </style>
+</head>
+<body class="bg-[#0A0A0A] text-white font-sans flex min-h-screen">
+
+    <aside class="w-64 border-r border-gray-800 p-6 flex flex-col sticky top-0 h-screen">
+        <h1 class="text-xl font-black italic tracking-tighter mb-12 uppercase">
+            MQS <span class="text-[#FF8C00]">ADMIN</span>
+        </h1>
+        
+        <nav class="flex-1 space-y-2">
+            <a href="#" class="sidebar-link flex items-center p-4 rounded-xl transition font-bold text-sm text-[#FF8C00]">
+                <i class="fa-solid fa-chart-line mr-3"></i> OVERVIEW
+            </a>
+            <a href="#users-section" class="sidebar-link flex items-center p-4 rounded-xl transition font-bold text-sm text-gray-500">
+                <i class="fa-solid fa-users mr-3"></i> CUSTOMERS
+            </a>
+            <a href="#reservations-section" class="sidebar-link flex items-center p-4 rounded-xl transition font-bold text-sm text-gray-500">
+                <i class="fa-solid fa-calendar-check mr-3"></i> RESERVATIONS
+            </a>
+        </nav>
+
+        <button onclick="handleLogout()" class="mt-auto flex items-center p-4 text-red-500 font-bold text-sm">
+            <i class="fa-solid fa-right-from-bracket mr-3"></i> EXIT SYSTEM
+        </button>
+    </aside>
+
+    <main class="flex-1 p-10 overflow-y-auto">
+        
+        <div class="flex justify-between items-center mb-10">
+            <div>
+                <h2 class="text-3xl font-black italic uppercase">System <span class="text-[#FF8C00]">Overview</span></h2>
+                <p class="text-gray-500 text-xs font-bold tracking-[0.3em] uppercase mt-2">Live monitoring for Besut HQ</p>
+            </div>
+            <div class="bg-[#111] px-6 py-3 rounded-2xl border border-gray-800 flex items-center">
+                <div class="w-2 h-2 bg-green-500 rounded-full animate-pulse mr-3"></div>
+                <span class="text-[10px] font-black uppercase tracking-widest text-gray-400">Database Connected</span>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+            <div class="bg-[#111] p-8 rounded-[30px] border border-gray-800 orange-glow">
+                <p class="text-gray-500 text-[10px] font-black uppercase tracking-widest">Total Members</p>
+                <h3 class="text-4xl font-black mt-2" id="stat-users">0</h3>
+            </div>
+            <div class="bg-[#111] p-8 rounded-[30px] border border-gray-800">
+                <p class="text-gray-500 text-[10px] font-black uppercase tracking-widest">Today's Bookings</p>
+                <h3 class="text-4xl font-black mt-2" id="stat-bookings">0</h3>
+            </div>
+            <div class="bg-[#111] p-8 rounded-[30px] border border-gray-800">
+                <p class="text-gray-500 text-[10px] font-black uppercase tracking-widest">Total Points Issued</p>
+                <h3 class="text-4xl font-black mt-2 text-[#FF8C00]" id="stat-points">0</h3>
+            </div>
+        </div>
+
+        <div id="users-section" class="mb-12">
+            <h4 class="text-lg font-bold mb-6 italic uppercase tracking-wider">Customer <span class="text-[#FF8C00]">Database</span></h4>
+            <div class="table-container">
+                <table class="w-full text-left border-collapse">
+                    <thead class="bg-[#1A1A1A] text-[10px] uppercase tracking-widest text-gray-500 font-bold">
+                        <tr>
+                            <th class="p-6">Name</th>
+                            <th class="p-6 text-center">Points</th>
+                            <th class="p-6 text-center">Tier</th>
+                            <th class="p-6 text-right">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="admin-user-list" class="divide-y divide-gray-800 text-sm">
+                        </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="reservations-section">
+            <h4 class="text-lg font-bold mb-6 italic uppercase tracking-wider">Recent <span class="text-[#FF8C00]">Reservations</span></h4>
+            <div class="table-container">
+                <table class="w-full text-left border-collapse">
+                    <thead class="bg-[#1A1A1A] text-[10px] uppercase tracking-widest text-gray-500 font-bold">
+                        <tr>
+                            <th class="p-6">Date/Time</th>
+                            <th class="p-6 text-center">Pax</th>
+                            <th class="p-6">Special Request</th>
+                            <th class="p-6 text-right">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="admin-res-list" class="divide-y divide-gray-800 text-sm">
+                        </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="mt-12">
+    <div class="flex justify-between items-center mb-6">
+        <h2 class="text-xl font-black italic uppercase tracking-widest">Live <span class="text-[#FF8C00]">Orders</span></h2>
+        <span class="text-[10px] bg-green-500/20 text-green-500 px-3 py-1 rounded-full font-bold animate-pulse">LIVE MONITORING</span>
+    </div>
+
+    <div class="bg-[#111] border border-gray-800 rounded-[30px] overflow-hidden">
+        <table class="w-full text-left border-collapse">
+            <thead>
+                <tr class="border-b border-gray-800 text-[10px] uppercase tracking-[0.2em] text-gray-500">
+                    <th class="p-6">Customer</th>
+                    <th class="p-6">Items Ordered</th>
+                    <th class="p-6">Total (RM)</th>
+                    <th class="p-6 text-right">Points Given</th>
+                </tr>
+            </thead>
+            <tbody id="admin-orders-list">
+                <tr>
+                    <td colspan="4" class="p-10 text-center text-gray-600 italic text-xs">Mencari pesanan terbaru...</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../js/config.js"></script>
+    <script src="../js/main.js"></script>
+    <script>
+    // Kita panggil bouncer ni sebaik sahaja page siap load
+    document.addEventListener('DOMContentLoaded', checkAdminGate);
+</script>
+</body>
+</html>

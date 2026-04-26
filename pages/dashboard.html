@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Member Dashboard | MQS Delights</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        .orange-glow { box-shadow: 0 0 40px rgba(255, 140, 0, 0.1); }
+        .glass { background: rgba(20, 20, 20, 0.7); backdrop-filter: blur(10px); }
+        .member-card {
+            background: linear-gradient(135deg, #1a1a1a 0%, #0a0a0a 100%);
+            border: 1px solid rgba(255, 140, 0, 0.2);
+        }
+    </style>
+</head>
+<body class="bg-[#0A0A0A] text-white min-h-screen font-sans">
+
+    <nav class="border-b border-gray-800 p-5 glass sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto flex justify-between items-center">
+            <h1 class="text-2xl font-black italic tracking-tighter">MQS <span class="text-[#FF8C00]">DELIGHTS</span></h1>
+            <div class="space-x-8 text-sm font-bold uppercase tracking-widest text-gray-400">
+                <a href="../index.html" class="hover:text-[#FF8C00] transition">Home</a>
+                <a href="menu.html" class="hover:text-[#FF8C00] transition">Menu</a>
+                <a href="cart.html" class="hover:text-[#FF8C00] transition text-white">My Cart</a>
+                <button onclick="handleLogout()" class="text-red-500 hover:text-red-400 transition">Logout</button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-6xl mx-auto p-6 mt-8">
+        
+        <div class="mb-10">
+            <h2 class="text-4xl font-black italic">WELCOME BACK, <span id="user-name" class="text-[#FF8C00] uppercase underline decoration-gray-800 underline-offset-8">LOADING...</span></h2>
+            <p class="text-gray-500 mt-4 tracking-widest uppercase text-xs font-bold">Your MQS Exclusive Membership Overview</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            
+            <div class="md:col-span-2 member-card p-8 rounded-[40px] relative overflow-hidden orange-glow">
+                <div class="absolute top-[-20%] right-[-10%] w-64 h-64 bg-[#FF8C00] opacity-10 blur-[80px] rounded-full"></div>
+                
+                <div class="flex justify-between items-start relative z-10">
+                    <div>
+                        <p class="text-gray-500 text-xs font-bold uppercase tracking-[0.3em]">Current Balance</p>
+                        <h3 class="text-6xl font-black mt-2 text-white"><span id="user-points">0</span> <span class="text-sm text-[#FF8C00] font-normal tracking-normal">PTS</span></h3>
+                    </div>
+                    <div class="bg-[#FF8C00] text-black px-6 py-2 rounded-full font-black italic text-sm" id="user-tier">
+                        BRONZE MEMBER
+                    </div>
+                </div>
+
+                <div class="mt-12 relative z-10">
+                    <div class="flex justify-between text-xs font-bold uppercase tracking-widest mb-3">
+                        <span class="text-gray-400" id="progress-label">PROGRESS TO SILVER</span>
+                        <span class="text-[#FF8C00]" id="points-needed">500 PTS REMAINING</span>
+                    </div>
+                    <div class="w-full bg-gray-900 h-3 rounded-full overflow-hidden">
+                        <div id="points-bar" class="bg-[#FF8C00] h-full transition-all duration-1000" style="width: 0%"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="space-y-4">
+                <a href="reservation.html" class="block w-full bg-[#121212] border border-gray-800 p-6 rounded-[30px] hover:border-[#FF8C00] transition-all group">
+                    <i class="fa-solid fa-calendar-check text-[#FF8C00] mb-4 text-2xl"></i>
+                    <h4 class="font-bold text-lg">Book a Table</h4>
+                    <p class="text-gray-500 text-sm mt-1">Reserve your premium spot.</p>
+                </a>
+                <a href="menu.html" class="block w-full bg-[#121212] border border-gray-800 p-6 rounded-[30px] hover:border-[#FF8C00] transition-all">
+                    <i class="fa-solid fa-utensils text-[#FF8C00] mb-4 text-2xl"></i>
+                    <h4 class="font-bold text-lg">Order Food</h4>
+                    <p class="text-gray-500 text-sm mt-1">Wagyu Burger is waiting.</p>
+                </a>
+            </div>
+
+        </div>
+
+        <div class="mt-12 bg-[#121212] border border-gray-800 rounded-[40px] p-8 orange-glow">
+    <div class="flex justify-between items-center mb-8">
+        <h4 class="text-xl font-bold italic uppercase tracking-tighter">Your <span class="text-[#FF8C00]">Activity</span></h4>
+        <span class="text-[10px] bg-gray-900 text-gray-500 px-3 py-1 rounded-full font-bold uppercase tracking-widest">Live Updates</span>
+    </div>
+
+    <div id="vip-section" class="mt-8 hidden">
+    <div class="bg-gradient-to-r from-[#FFD700] to-[#E67E00] p-[2px] rounded-[30px] orange-glow">
+        <div class="bg-[#0A0A0A] rounded-[28px] p-8 flex flex-col md:flex-row justify-between items-center gap-6">
+            <div>
+                <span class="bg-[#FFD700] text-black text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-tighter">Gold Exclusive</span>
+                <h4 class="text-2xl font-black italic mt-3 uppercase tracking-tighter">VIP <span class="text-[#FFD700]">WAGYU</span> UPGRADE</h4>
+                <p class="text-gray-400 text-sm mt-1">Since you're a Gold Member, order any steak and we'll upgrade it to Wagyu for free today!</p>
+            </div>
+            <button class="bg-[#FFD700] text-black px-8 py-4 rounded-2xl font-black hover:scale-105 transition-all shadow-xl shadow-yellow-600/20">
+                CLAIM NOW
+            </button>
+        </div>
+    </div>
+</div> 
+
+    <div id="reservation-display" class="space-y-4">
+        <div class="text-center py-10 text-gray-600 italic">
+            <i class="fa-solid fa-spinner fa-spin mb-3 text-3xl text-[#FF8C00]"></i>
+            <p>Fetching your latest reservation...</p>
+        </div>
+    </div>
+</div>
+
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../js/config.js"></script>
+    <script src="../js/main.js"></script>
+    <script>
+        // Jalankan fetch data bila page load
+        document.addEventListener('DOMContentLoaded', loadDashboardData);
+    </script>
+</body>
+</html>

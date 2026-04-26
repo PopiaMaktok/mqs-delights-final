@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book a Table | MQS Delights</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .orange-glow { box-shadow: 0 0 40px rgba(255, 140, 0, 0.1); }
+        .input-style { background: #151515; border: 1px solid #222; border-radius: 15px; padding: 1rem; width: 100%; color: white; transition: all 0.3s; }
+        .input-style:focus { border-color: #FF8C00; outline: none; box-shadow: 0 0 10px rgba(255, 140, 0, 0.2); }
+    </style>
+</head>
+<body class="bg-[#0A0A0A] text-white min-h-screen">
+
+    <nav class="border-b border-gray-800 p-5 sticky top-0 bg-[#0A0A0A] z-50">
+        <div class="max-w-6xl mx-auto flex justify-between items-center">
+            <h1 class="text-2xl font-black italic tracking-tighter">MQS <span class="text-[#FF8C00]">DELIGHTS</span></h1>
+            <div class="space-x-8 text-sm font-bold uppercase tracking-widest text-gray-400">
+                <a href="../index.html" class="hover:text-[#FF8C00] transition">Home</a>
+                <a href="dashboard.html" class="hover:text-[#FF8C00] transition">Dashboard</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-2xl mx-auto p-6 mt-12 mb-20">
+        <div class="text-center mb-12">
+            <h2 class="text-5xl font-black italic uppercase tracking-tighter">BOOK A <span class="text-[#FF8C00]">TABLE</span></h2>
+            <p class="text-gray-500 mt-2 tracking-widest uppercase text-xs font-bold">Secure your spot for a premium dining experience</p>
+        </div>
+
+        <form id="reservation-form" class="bg-[#111] p-10 rounded-[40px] border border-gray-800 orange-glow space-y-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label class="block text-xs font-bold text-gray-500 uppercase tracking-widest mb-2 ml-2">Date</label>
+                    <input type="date" id="res-date" required class="input-style">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-500 uppercase tracking-widest mb-2 ml-2">Time</label>
+                    <input type="time" id="res-time" required class="input-style">
+                </div>
+            </div>
+
+            <div>
+                <label class="block text-xs font-bold text-gray-500 uppercase tracking-widest mb-2 ml-2">Number of Guests</label>
+                <select id="res-guests" required class="input-style">
+                    <option value="1">1 Person</option>
+                    <option value="2">2 Persons</option>
+                    <option value="4">4 Persons</option>
+                    <option value="6">6 Persons (VIP)</option>
+                    <option value="8+">Large Group (8+)</option>
+                </select>
+            </div>
+
+            <div>
+                <label class="block text-xs font-bold text-gray-500 uppercase tracking-widest mb-2 ml-2">Special Request (Optional)</label>
+                <textarea id="res-notes" rows="3" placeholder="Birthday celebration, window seat, etc..." class="input-style"></textarea>
+            </div>
+
+            <button type="submit" class="w-full py-5 bg-[#FF8C00] text-black font-black rounded-2xl text-xl hover:scale-[1.02] transition-all uppercase italic">
+                CONFIRM RESERVATION
+            </button>
+        </form>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../js/config.js"></script>
+    <script src="../js/main.js"></script>
+</body>
+</html>
